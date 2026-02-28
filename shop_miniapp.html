@@ -98,13 +98,13 @@
     .gallery-arrow.prev{left:10px}
     .gallery-arrow.next{right:10px}
 
-    .detail-body{padding:18px 16px 160px}
+    .detail-body{padding:18px 16px 210px}
     .detail-category{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
     .detail-name{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;line-height:1.2;margin-bottom:10px;letter-spacing:-.3px}
     .detail-price-row{display:flex;align-items:baseline;gap:8px;margin-bottom:16px}
     .detail-price{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--accent)}
     .detail-old-price{font-size:16px;color:var(--muted);text-decoration:line-through}
-    .detail-desc{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:22px}
+    .detail-desc{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:22px;white-space:pre-line}
 
     /* ВАРИАНТЫ — ЦВЕТА */
     .variants-section{margin-bottom:20px}
@@ -424,7 +424,7 @@ function openDetail(id){
   document.getElementById('detail-back-label').textContent=CAT[p.category]||'';
   document.getElementById('detail-cat').textContent=CAT[p.category]||'';
   document.getElementById('detail-name').textContent=p.name;
-  document.getElementById('detail-desc').textContent=p.desc||'';
+  document.getElementById('detail-desc').innerHTML=(p.desc||'').replace(/\n/g,'<br>');
   document.getElementById('detail-tags').innerHTML=(p.tags||[]).map(t=>`<span class="detail-tag">${t}</span>`).join('');
 
   renderGallery(p);
