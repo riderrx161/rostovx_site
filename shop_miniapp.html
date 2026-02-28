@@ -674,7 +674,12 @@ async function submitOrder(){
 
   // EmailJS
   try{
-    const s=JSON.parse(localStorage.getItem('kitestore_admin')||'{}');
+    // EmailJS — настройки прописаны напрямую
+    const s={
+      ejsService:  localStorage.getItem('kitestore_admin') ? JSON.parse(localStorage.getItem('kitestore_admin')).ejsService  || 'service_22stgga'  : 'service_22stgga',
+      ejsTemplate: localStorage.getItem('kitestore_admin') ? JSON.parse(localStorage.getItem('kitestore_admin')).ejsTemplate || 'template_0i390ls' : 'template_0i390ls',
+      ejsPubkey:   localStorage.getItem('kitestore_admin') ? JSON.parse(localStorage.getItem('kitestore_admin')).ejsPubkey   || '-DjXc79gv2chW_39R' : '-DjXc79gv2chW_39R',
+    };
     if(s.ejsService&&s.ejsTemplate&&s.ejsPubkey){
       emailjs.init(s.ejsPubkey);
       const itemsText=orderData.items.map(i=>
@@ -687,7 +692,7 @@ async function submitOrder(){
         date:new Date().toLocaleString('ru'),
       });
     }
-  }catch(e){console.warn('EmailJS:',e)}
+  }catch(e){console.error('EmailJS error:',e);showToast('⚠️ Заказ принят, но письмо не отправлено: '+((e&&e.text)||e));}
 
   cart=[];updateBadge();renderProducts();
   btn.disabled=false;btn.textContent='Оформить заказ 🌊';
