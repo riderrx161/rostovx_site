@@ -256,6 +256,7 @@
   <div class="detail-back">
     <button class="back-btn" onclick="closeDetail()">←</button>
     <span id="detail-back-label" style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.5px;text-transform:uppercase"></span>
+    <button onclick="shareProduct()" style="margin-left:auto;background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:50px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;font-family:'Barlow',sans-serif">🔗 Поделиться</button>
   </div>
 
   <!-- 1. ГАЛЕРЕЯ -->
@@ -383,6 +384,7 @@ async function loadProducts(){
   }catch{products=defaultProducts()}
   renderProducts();
   document.getElementById('loader').classList.add('hidden');
+  checkHashOnLoad();
 }
 
 // ── RENDER CATALOG ────────────────────────────────────────────
@@ -458,8 +460,42 @@ function openDetail(id){
   renderSizes(p);
   updateBuyBar();
   document.getElementById('detail-sheet').classList.add('open');
+
+  // Обновляем URL — добавляем хэш с ID товара
+  history.pushState({productId:id}, '', '#product-'+id);
 }
-function closeDetail(){document.getElementById('detail-sheet').classList.remove('open')}
+
+function closeDetail(){
+  document.getElementById('detail-sheet').classList.remove('open');
+  // Убираем хэш из URL
+  history.pushState({}, '', window.location.pathname);
+}
+
+// Кнопка «Поделиться» — копирует ссылку или открывает Share API
+function shareProduct(){
+  const url=window.location.href;
+  if(navigator.share){
+    navigator.share({title:CP?.name||'Товар',url});
+  } else {
+    navigator.clipboard.writeText(url).then(()=>showToast('🔗 Ссылка скопирована!'));
+  }
+}
+
+// При нажатии «Назад» в браузере — закрываем карточку
+window.addEventListener('popstate', e=>{
+  if(!window.location.hash){
+    document.getElementById('detail-sheet').classList.remove('open');
+  }
+});
+
+// При загрузке страницы — открываем товар если есть хэш в URL
+function checkHashOnLoad(){
+  const hash=window.location.hash;
+  if(hash && hash.startsWith('#product-')){
+    const id=parseInt(hash.replace('#product-',''));
+    if(!isNaN(id)) setTimeout(()=>openDetail(id), 300);
+  }
+}
 
 function renderGallery(p){
   const g=document.getElementById('detail-gallery');
