@@ -38,8 +38,9 @@
 
   /* HERO */
   .hero {
-    position:relative; height:100vh; min-height:560px;
+    position:relative; min-height:100vh;
     display:flex; align-items:center; justify-content:center; overflow:hidden;
+    padding: 80px 24px;
   }
   .hero-bg {
     position:absolute; inset:0;
@@ -69,10 +70,12 @@
   }
   .hero-title {
     font-family:'Bebas Neue',sans-serif;
-    font-size:clamp(52px,11vw,130px);
-    line-height:0.93; letter-spacing:3px;
+    font-size:clamp(42px,9vw,130px);
+    line-height:0.95; letter-spacing:2px;
     text-shadow:0 0 60px rgba(245,166,35,0.2);
     animation:fadeUp 1s 0.4s both;
+    word-break:keep-all;
+    hyphens:none;
   }
   .hero-title span { color:var(--red); }
   .hero-sub {
@@ -244,6 +247,42 @@
     .tg-card { padding:32px 24px; }
     .divider { margin:0 20px; }
   }
+
+  /* LIGHTBOX */
+  .lightbox-overlay {
+    display:none; position:fixed; inset:0; z-index:9999;
+    background:rgba(0,0,0,0.92);
+    align-items:center; justify-content:center;
+    cursor:zoom-out;
+    animation:lbFadeIn 0.25s ease;
+  }
+  .lightbox-overlay.active { display:flex; }
+  @keyframes lbFadeIn {
+    from { opacity:0; }
+    to   { opacity:1; }
+  }
+  .lightbox-img {
+    max-width:95vw; max-height:95vh;
+    object-fit:contain;
+    border-radius:2px;
+    box-shadow:0 0 60px rgba(0,0,0,0.8);
+    animation:lbZoomIn 0.25s ease;
+    cursor:default;
+  }
+  @keyframes lbZoomIn {
+    from { transform:scale(0.92); opacity:0; }
+    to   { transform:scale(1); opacity:1; }
+  }
+  .lightbox-close {
+    position:fixed; top:20px; right:24px;
+    font-size:36px; color:rgba(255,255,255,0.7);
+    cursor:pointer; line-height:1; z-index:10000;
+    transition:color 0.2s;
+    background:none; border:none; padding:8px;
+  }
+  .lightbox-close:hover { color:#fff; }
+  .gallery-item { cursor:zoom-in; }
+
 </style>
 </head>
 <body>
@@ -266,11 +305,11 @@
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">Кайт-школа RostovX · Ростовская область</p>
+    <p class="hero-eyebrow">Кайт-школа RostovX</p>
     <h1 class="hero-title">ПАВЛО-<span>ОЧАКОВСКАЯ</span><br>КОСА</h1>
     <p class="hero-sub">Главный кайт-спот Азовского побережья</p>
     <div class="hero-actions">
-      <a href="#map" class="btn-primary">Как добраться</a>
+      <a href="#road" class="btn-primary">Как добраться</a>
       <a href="#contact" class="btn-outline">Записаться на урок</a>
     </div>
   </div>
@@ -363,47 +402,30 @@
   <div style="max-width:1200px; margin:0 auto;">
     <p class="section-label">Ветровые направления</p>
     <h2 class="section-title">ТОПОВЫЕ<br>НАПРАВЛЕНИЯ</h2>
+    <div class="features-grid" style="margin-top:40px;">
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px; margin-top:40px;">
-
-      <!-- ВОСТОК / СЕВЕРО-ВОСТОК -->
-      <div class="wind-card wind-good">
-        <div class="wind-card-header">
-          <span class="wind-badge good">✅ ОТЛИЧНО</span>
-          <div class="wind-dir">В / СВ</div>
-        </div>
-        <div class="wind-name">Восток · Северо-Восток</div>
-        <p class="wind-desc">В акватории косы флэт — ровная вода без чопа и волны. Если дует сильно и долго, воду выдувает, становится мелко, а может и вовсе превратить акваторию в пустыню — уходим «за косу». <strong>Идеальны для отработки трюков и прыжков.</strong></p>
+      <div class="feature-card">
+        <span class="feature-icon">✅</span>
+        <div class="feature-name">Восток · Северо-Восток</div>
+        <p class="feature-desc">Флэт в акватории — ровная вода без чопа и волны. При сильном ветре воду выдувает, уходим «за косу». <strong style="color:var(--white);">Идеальны для трюков и прыжков.</strong></p>
       </div>
 
-      <!-- ЗАПАД / ЮЗ -->
-      <div class="wind-card wind-good">
-        <div class="wind-card-header">
-          <span class="wind-badge good">✅ ХОРОШО</span>
-          <div class="wind-dir">З / ЮЗ</div>
-        </div>
-        <div class="wind-name">Запад · Юго-Запад</div>
-        <p class="wind-desc">Приносит воду, поднимается чоп (мелкая волна). При сильных ветрах становится глубоко. Помните: если вас «смоет» за косу, поднять кайт там будет сложно из-за <strong>турбулентности от зданий на берегу.</strong></p>
+      <div class="feature-card">
+        <span class="feature-icon">✅</span>
+        <div class="feature-name">Запад · Юго-Запад</div>
+        <p class="feature-desc">Приносит воду, поднимается чоп. При сильном ветре становится глубоко. Если унесёт за косу — поднять кайт сложно из-за <strong style="color:var(--white);">турбулентности от зданий.</strong></p>
       </div>
 
-      <!-- ЮГ -->
-      <div class="wind-card wind-danger">
-        <div class="wind-card-header">
-          <span class="wind-badge danger">⚠️ ОПАСНО</span>
-          <div class="wind-dir" style="color:#cc1111;">Ю</div>
-        </div>
-        <div class="wind-name">Юг</div>
-        <p class="wind-desc">Ветер с берега — рваный, нестабильный, дует только «по верхам». <strong>Новичкам — категорически нет.</strong> Профи — просто не кайфанут.</p>
+      <div class="feature-card" style="border-top-color:#cc1111;">
+        <span class="feature-icon">⚠️</span>
+        <div class="feature-name" style="color:#cc1111;">Юг — Опасно</div>
+        <p class="feature-desc">Ветер с берега — рваный, нестабильный, дует только «по верхам». <strong style="color:var(--white);">Новичкам категорически нет.</strong> Профи — просто не кайфанут.</p>
       </div>
 
-      <!-- СЕВЕР -->
-      <div class="wind-card wind-warn">
-        <div class="wind-card-header">
-          <span class="wind-badge warn">⚠️ С ОСТОРОЖНОСТЬЮ</span>
-          <div class="wind-dir" style="color:#f5a623;">С</div>
-        </div>
-        <div class="wind-name">Север</div>
-        <p class="wind-desc">Дует редко, чётко в берег. <strong>Не рекомендуется новичкам</strong> — особенно тем, кто не умеет «вырезаться»: есть опасность, что вас вынесет на берег.</p>
+      <div class="feature-card" style="border-top-color:#f5a623;">
+        <span class="feature-icon">⚠️</span>
+        <div class="feature-name" style="color:#f5a623;">Север — С осторожностью</div>
+        <p class="feature-desc">Дует редко, чётко в берег. <strong style="color:var(--white);">Не рекомендуется новичкам</strong> — особенно тем, кто не умеет «вырезаться»: есть риск выноса на берег.</p>
       </div>
 
     </div>
@@ -412,106 +434,48 @@
 
 <div class="divider"></div>
 
-<!-- ROAD & LOCATION -->
-<section style="background:var(--dark);">
+<!-- MAP -->
+<section id="road" style="background:var(--dark);">
   <div style="max-width:1200px; margin:0 auto;">
-    <p class="section-label">Практическая информация</p>
-    <h2 class="section-title">ДОРОГА<br>И РАСПОЛОЖЕНИЕ</h2>
+    <p class="section-label">Как добраться · Где мы</p>
+    <h2 class="section-title">РАСПОЛОЖЕНИЕ<br>И ДОРОГА</h2>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px; margin-top:40px;">
+    <div class="features-grid" style="margin-top:40px;">
 
-      <div class="info-block">
-        <div class="info-block-icon">🛣️</div>
-        <div class="info-block-title">Дорога · 65–70 км</div>
-        <p class="info-block-text">Едем через <strong>Пешково</strong> (новая трасса на Азов). По пути обязательно тормозим в <strong>«Пятёрочке» в Пешково</strong> — это последняя точка цивилизации с нормальным выбором еды и воды. Далее только мелкие сельские магазины. На самой косе магазины просыпаются только к лету.</p>
+      <div class="feature-card">
+        <span class="feature-icon">📍</span>
+        <div class="feature-name">Координаты</div>
+        <p class="feature-desc">Павло-Очаково, Ростовская обл., 346774<br><strong style="color:var(--white);">47.040480, 39.104973</strong><br><br>Перед выездом свяжитесь с нами — уточним актуальный маршрут и условия на воде.</p>
       </div>
 
-      <div class="info-block">
-        <div class="info-block-icon">🏖️</div>
-        <div class="info-block-title">Где мы?</div>
-        <p class="info-block-text">Не путайте <strong>туристический пляж</strong> (справа — шезлонги, навесы, кафешки) и наш <strong>кайт-спот</strong>. Мы базируемся там, где простор и мелководье — <strong>слева</strong>. Можно брать семью — они могут чилить на базах с бассейнами, пока вы катаете.</p>
+      <div class="feature-card">
+        <span class="feature-icon">🛣️</span>
+        <div class="feature-name">Дорога · 65–70 км</div>
+        <p class="feature-desc">Едем через <strong style="color:var(--white);">Пешково</strong> (новая трасса на Азов). Обязательно останавливаемся в <strong style="color:var(--white);">«Пятёрочке» в Пешково</strong> — последняя точка с нормальным выбором еды. Далее только мелкие сельские магазины.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">🏖️</span>
+        <div class="feature-name">Где мы на косе</div>
+        <p class="feature-desc">Не путайте туристический пляж (справа — шезлонги, навесы, кафе) и наш кайт-спот. Мы там, где простор и мелководье — <strong style="color:var(--white);">слева.</strong> Можно брать семью — базы с бассейнами рядом.</p>
       </div>
 
     </div>
-  </div>
-</section>
 
-<style>
-.wind-card {{
-  background:#0f0f0f; padding:32px 28px;
-  border-top:3px solid #1a1a1a; transition:background 0.3s;
-}}
-.wind-card:hover {{ background:#141414; }}
-.wind-card.wind-good {{ border-top-color:#2a7a2a; }}
-.wind-card.wind-danger {{ border-top-color:#cc1111; }}
-.wind-card.wind-warn {{ border-top-color:#f5a623; }}
-
-.wind-card-header {{
-  display:flex; justify-content:space-between; align-items:flex-start;
-  margin-bottom:12px;
-}}
-.wind-badge {{
-  font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
-  font-weight:700; padding:4px 10px; border-radius:2px;
-}}
-.wind-badge.good {{ background:rgba(42,122,42,0.2); color:#5cb85c; border:1px solid rgba(42,122,42,0.3); }}
-.wind-badge.danger {{ background:rgba(204,17,17,0.15); color:#cc1111; border:1px solid rgba(204,17,17,0.3); }}
-.wind-badge.warn {{ background:rgba(245,166,35,0.15); color:#f5a623; border:1px solid rgba(245,166,35,0.3); }}
-
-.wind-dir {{
-  font-family:'Bebas Neue',sans-serif; font-size:40px;
-  color:#f5f0e8; line-height:1; letter-spacing:2px;
-}}
-.wind-name {{
-  font-family:'Bebas Neue',sans-serif; font-size:22px;
-  letter-spacing:2px; color:var(--white); margin-bottom:12px;
-}}
-.wind-desc {{ font-size:13px; line-height:1.8; color:rgba(245,240,232,0.65); }}
-.wind-desc strong {{ color:var(--white); }}
-
-.info-block {{
-  background:#111; padding:36px 28px; border-left:3px solid #cc1111;
-}}
-.info-block-icon {{ font-size:36px; margin-bottom:14px; }}
-.info-block-title {{
-  font-family:'Bebas Neue',sans-serif; font-size:22px;
-  letter-spacing:2px; color:var(--white); margin-bottom:14px;
-}}
-.info-block-text {{ font-size:14px; line-height:1.85; color:rgba(245,240,232,0.68); }}
-.info-block-text strong {{ color:var(--white); }}
-
-@media(max-width:900px) {{
-  .wind-card, .info-block {{ grid-column:span 1 !important; }}
-  section > div > div[style*="grid-template-columns:1fr 1fr"] {{
-    grid-template-columns:1fr !important;
-  }}
-}}
-</style>
-
-<!-- MAP -->
-<section id="map" class="map-section">
-  <div class="map-inner">
-    <p class="section-label">Как добраться</p>
-    <h2 class="section-title">РАСПОЛОЖЕНИЕ</h2>
-    <div class="map-layout">
-      <div class="map-info">
-        <p class="map-highlight">📍 Павло-Очаково, Ростовская обл., 346774</p>
-        <p>Коса находится в <strong>~120 км от Ростова-на-Дону</strong>. Добраться можно на личном автомобиле — въезд на косу прямо к пляжу.</p>
-        <p>Точные координаты: <strong>47.040480, 39.104973</strong></p>
-        <p>Перед выездом свяжитесь с нами — уточним актуальный маршрут и условия на воде.</p>
-        <div style="margin-top:24px;">
-          <a href="tel:+7-918-523-14-89" class="btn-primary" style="margin-right:12px;">📞 Позвонить</a>
-          <a href="https://wa.me/79185231489" target="_blank" class="btn-outline">WhatsApp</a>
+    <div style="margin-top:3px;">
+      <div style="background:#0f0f0f; border-top:3px solid var(--red); overflow:hidden;">
+        <div style="aspect-ratio:21/8; min-height:280px;">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d2500!2d39.104973!3d47.040480!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNDfCsDAyJzE1LjciTiAzOcKwMDYnMTcuOSJF!5e0!3m2!1sru!2sru!4v1700000000000!5m2!1sru!2sru"
+            width="100%" height="100%"
+            style="border:none; filter:grayscale(0.2) invert(0.88) hue-rotate(180deg); opacity:0.85; display:block;"
+            allowfullscreen="" loading="lazy"
+            title="Павло-Очаковская коса — кайт-школа RostovX">
+          </iframe>
         </div>
       </div>
-      <div class="map-embed">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d2500!2d39.104973!3d47.040480!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNDfCsDAyJzE1LjciTiAzOcKwMDYnMTcuOSJF!5e0!3m2!1sru!2sru!4v1700000000000!5m2!1sru!2sru"
-          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-          title="Павло-Очаковская коса — кайт-школа RostovX">
-        </iframe>
-      </div>
     </div>
+
   </div>
 </section>
 
@@ -548,6 +512,41 @@
   <div class="footer-text">© 2010 RostovX · Кайт-школа в Ростове-на-Дону · Павло-Очаковская коса</div>
   <div class="footer-text">+7 918 523-14-89</div>
 </footer>
+
+
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img class="lightbox-img" id="lightbox-img" src="" alt="" onclick="event.stopPropagation()">
+</div>
+
+<script>
+function openLightbox(src, alt) {
+  var lb = document.getElementById('lightbox');
+  var img = document.getElementById('lightbox-img');
+  img.src = src;
+  img.alt = alt || '';
+  lb.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeLightbox();
+});
+
+// Bind clicks to gallery images
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.gallery-item img').forEach(function(img) {
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', function() {
+      openLightbox(this.src, this.alt);
+    });
+  });
+});
+</script>
 
 </body>
 </html>
